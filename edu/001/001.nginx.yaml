@@ -1,0 +1,15 @@
+--- 
+apiVersion: v1 
+kind: Pod  
+metadata:   
+  name: nginx
+  labels:
+spec: 
+  containers:   
+    - name: web 
+      image: nginx 
+#     command: ['sh', '-c', 'echo hello']   커맨드 수행 예시
+      ports: 
+        - name: web 
+          containerPort: 80
+          protocol: TCP 

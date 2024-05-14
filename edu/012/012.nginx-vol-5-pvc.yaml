@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nginx-pvc-1
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce     # 서로 매칭되는 클래스를 사용하겠다는 의미
+  resources:
+    requests:
+      storage: 1Gi

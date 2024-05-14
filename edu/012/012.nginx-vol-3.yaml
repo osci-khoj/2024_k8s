@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-vol-3
+spec:
+  containers:
+  - name: nginx-vol-3
+    image: nginx
+    volumeMounts:
+    - name: host-path-volume
+      mountPath: /usr/share/nginx/html
+  nodeName: w1-k8s             #노드네임을 이용하여 woker1번에서 구동되도록 만든다. 본인 서버의 워크 노드 이름으로 변경한다. 
+  volumes:
+  - name: host-path-volume
+    hostPath:
+      path: /hostpath        # Path를 잘못 입력하여 못찾는 경우 컨테이너가 기동되지 않는다.
+      type: Directory

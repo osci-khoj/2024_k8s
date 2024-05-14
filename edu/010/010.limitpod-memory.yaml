@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: limitpod-memory
+spec:
+  containers:
+  - name: limitpod-memory
+    image: polinux/stress
+    resources:
+      requests:
+        memory: "10Mi"
+        cpu: "10m"
+        ephemeral-storage: "100M"
+      limits:
+        memory: "20Mi"
+        cpu: "20m"
+        ephemeral-storage: "100M"
+    command: ["stress"]
+    args: ["--vm", "1", "--vm-bytes", "25M", "--vm-hang", "1"]

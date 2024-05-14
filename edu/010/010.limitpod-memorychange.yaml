@@ -1,0 +1,44 @@
+--- 
+apiVersion: apps/v1 
+kind: Deployment
+metadata:   
+  name: limitpod
+  labels: 
+    app: limitpod
+spec:
+  selector:
+    matchLabels:
+      app: limitpod
+  template:
+    metadata:
+      labels:
+        app: limitpod
+    spec:
+      containers:   
+        - name: limitpod 
+          image: gcr.io/google_containers/hpa-example
+          ports: 
+            - name: web 
+              containerPort: 80
+              protocol: TCP
+          resources:
+            requests:
+              memory: "180M"
+              cpu: "150m"
+              ephemeral-storage: "100M"
+            limits:
+              memory: "180M"
+              cpu: "300m"
+              ephemeral-storage: "100M"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: limitpod
+  labels:
+    run: limitpod
+spec:
+  ports:
+  - port: 80
+  selector:
+    app: limitpod  

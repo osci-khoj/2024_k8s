@@ -30,9 +30,8 @@ find $HOME/_Lecture_k8s_learning.kit -regex ".*\.\(sh\)" -exec chmod 700 {} \;
 # make rerepo-k8s-learning.kit and put permission
 cat <<EOF > /usr/local/bin/rerepo-k8s-learning.kit
 #!/usr/bin/env bash
-rm -rf $HOME/_Lecture_k8s_learning.kit 
-git clone https://github.com/sysnet4admin/_Lecture_k8s_learning.kit.git $HOME/_Lecture_k8s_learning.kit
-find $HOME/_Lecture_k8s_learning.kit -regex ".*\.\(sh\)" -exec chmod 700 {} \;
+git clone https://github.com/dncs0725/2024_k8s.git $HOME/edu
+find $HOME/edu -regex ".*\.\(sh\)" -exec chmod 700 {} \;
 EOF
 chmod 700 /usr/local/bin/rerepo-k8s-learning.kit
 

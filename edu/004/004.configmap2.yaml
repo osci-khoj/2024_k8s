@@ -1,0 +1,23 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configmap
+  labels:
+spec:
+  containers:
+    - name: configmap
+      image: httpd
+      ports:
+        - name: web
+          containerPort: 80
+          protocol: TCP
+      volumeMounts:
+        - name: httpd-conf-volume
+          mountPath: /usr/local/apache2/conf/httpd.conf
+          subPath: httpd.conf
+  volumes:
+    - name: httpd-conf-volume
+      configMap:
+        defaultMode: 0777
+        name: httpd.conf

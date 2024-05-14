@@ -1,0 +1,78 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsapp
+  namespace: ns1
+  labels:
+    app: nsapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nsapp
+  template:
+    metadata:
+      labels:
+        app: nsapp
+    spec:
+      containers:
+      - name: nsapp
+        image: nginx
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nssvc
+  namespace: ns1
+  labels:
+    name: nssvc
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      protocol: TCP
+      name: http
+  selector:
+    app: nsapp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nsapp
+  namespace: ns2
+  labels:
+    app: nsapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nsapp
+  template:
+    metadata:
+      labels:
+        app: nsapp
+    spec:
+      containers:
+      - name: nsapp
+        image: nginx
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nssvc
+  namespace: ns2
+  labels:
+    name: nssvc
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      protocol: TCP
+      name: http
+  selector:
+    app: nsapp

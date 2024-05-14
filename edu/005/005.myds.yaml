@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: my-ds
+  labels:
+    k8s-app: ds
+spec:
+  selector:
+    matchLabels:
+      name: ds
+  template:
+    metadata:
+      labels:
+        name: ds
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/worker
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: my-ds
+        image: nginx
+        ports:
+        - containerPort: 80

@@ -1,0 +1,29 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: getclusterinfo
+spec:
+  template:
+    spec:
+      containers:
+      - name: getclusterinfo
+        image: bitnami/kubectl
+        command: ['/bin/bash', '-c', "/data/go.sh"]
+        volumeMounts:
+          - name: nfs-volume
+            mountPath: /data
+          - name: config
+            mountPath: .kube/config
+      nodeName: m-k8s
+      volumes:
+        - name: nfs-volume
+          nfs:
+            path: /nfs
+            server: w2-k8s 
+        - name: config
+          hostPath:
+            path: /tmp/config
+            type: File
+      restartPolicy: Never
+  backoffLimit: 4
