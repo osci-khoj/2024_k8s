@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prod-account
+  namespace: default
+data:
+  ID: prod-user
+  PASSWORD: prod-pass
+  LOG_LEVEL: info

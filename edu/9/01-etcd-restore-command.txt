@@ -1,0 +1,5 @@
+etcdctl --endpoints=https://192.168.1.101:2379 \
+  --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+  --cert=/etc/kubernetes/pki/etcd/server.crt \
+  --key=/etc/kubernetes/pki/etcd/server.key \
+  snapshot restore /opt/master001-etcd-backup --data-dir=/var/lib/etcd2

@@ -1,0 +1,155 @@
+--- 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx1-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx1
+    spec:
+      containers:
+        - name: my-echo
+          image: jmalloc/echo-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service-clusterip
+  labels:
+    name: nginx-service-clusterip
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80       # Cluster IP
+      targetPort: 8080  # Application port
+      protocol: TCP
+      name: http
+  selector:
+    app: nginx1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx2-deployment
+spec:
+  selector:
+    matchLabels:
+      app: nginx2
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx2
+    spec:
+      containers:
+        - name: my-echo
+          image: jmalloc/echo-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx2-service-clusterip
+  labels:
+    name: nginx2-service-clusterip
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80       # Cluster IP
+      targetPort: 8080  # Application port
+      protocol: TCP
+      name: http
+  selector:
+    app: nginx2
+
+
+
+(6) 위에서 만든 yaml을 이용하여 pod 및 svc를 생성 합니다
+
+[root@m-k8s vagrant]# k apply -f 009.nginx.yml 
+deployment.apps/nginx1-deployment created
+service/nginx-service-clusterip created
+deployment.apps/nginx2-deployment created
+service/nginx2-service-clusterip created
+
+
+
+pod와 Service가 잘 생성되었으며, 생성된 Service로 통신시도 시 연결된 Pod 이름을 확인합니다.
+
+kubectl get svc
+NAME                           TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)        AGE
+nginx-service-clusterip    ClusterIP      10.105.151.217   <none>          80/TCP         20s
+nginx2-service-clusterip   ClusterIP      10.106.195.22    <none>          80/TCP         20s
+
+kubectl get pod
+NAME                                            READY   STATUS      RESTARTS   AGE
+nginx1-deployment-545749bf4d-h7qfx              1/1     Running     0          29s
+nginx2-deployment-56d6f87fc9-9m7h2              1/1     Running     0          29s
+
+
+[root@m-k8s vagrant]# curl 10.105.151.217
+Request served by nginx1-deployment-8458b98748-75hlx
+
+GET / HTTP/1.1
+
+Host: 10.105.151.217
+Accept: */*
+User-Agent: curl/7.29.0
+
+curl 10.98.154.210
+
+
+[root@m-k8s vagrant]# curl 10.106.195.22
+Request served by nginx2-deployment-767fbbfc95-g42jr
+
+GET / HTTP/1.1
+
+Host: 10.106.195.22
+Accept: */*
+User-Agent: curl/7.29.0
+
+
+
+(7) L7기반의 라우팅을 해주는 ingress정책을 생성 합니다
+
+ingress svc로 들어온 패킷의 L7레이어 즉 도메인 주소를 체크하여 트래픽을 전달합니다.
+
+도메인 주소가 a.com이라면 nginx-service-clusterip로 연결합니다.
+
+도메인 주소가 b.com이라면 nginx2-service.clusterip로 연결합니다.
+
+009.ing.yaml
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: "a.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: nginx-service-clusterip
+            port:
+              number: 80
+  - host: "b.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: nginx2-service-clusterip
+            port:
+              number: 80

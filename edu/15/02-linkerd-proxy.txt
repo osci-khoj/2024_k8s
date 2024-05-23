@@ -1,0 +1,40 @@
+[root@m-k8s ~]# kubectl get -n emojivoto deploy -o yaml | linkerd inject - | kubectl apply -f -
+
+deployment "emoji" injected
+deployment "vote-bot" injected
+deployment "voting" injected
+deployment "web" injected
+
+deployment.apps/emoji configured
+deployment.apps/vote-bot configured
+deployment.apps/voting configured
+deployment.apps/web configured
+
+
+[root@m-k8s ~]# kubectl get all -n emojivoto
+NAME                            READY   STATUS    RESTARTS   AGE
+pod/emoji-55c59cf485-c4hbx      2/2     Running   0          5m1s
+pod/vote-bot-57d4c898bb-965fq   2/2     Running   0          5m1s
+pod/voting-87469d4bb-xx6gf      2/2     Running   0          5m1s
+pod/web-847cbcb586-5gw4m        2/2     Running   0          5m1s
+
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE
+service/emoji-svc    ClusterIP   10.233.5.28     <none>        8080/TCP,8801/TCP   7m44s
+service/voting-svc   ClusterIP   10.233.35.137   <none>        8080/TCP,8801/TCP   7m44s
+service/web-svc      ClusterIP   10.233.15.55    <none>        80/TCP              7m44s
+
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/emoji      1/1     1            1           7m44s
+deployment.apps/vote-bot   1/1     1            1           7m44s
+deployment.apps/voting     1/1     1            1           7m43s
+deployment.apps/web        1/1     1            1           7m43s
+
+NAME                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/emoji-55c59cf485      1         1         1       5m1s
+replicaset.apps/emoji-5dbdd567bd      0         0         0       7m44s
+replicaset.apps/vote-bot-57d4c898bb   1         1         1       5m1s
+replicaset.apps/vote-bot-58b4f5fdb7   0         0         0       7m44s
+replicaset.apps/voting-5fdcddcfc      0         0         0       7m43s
+replicaset.apps/voting-87469d4bb      1         1         1       5m1s
+replicaset.apps/web-67c857998c        0         0         0       7m43s
+replicaset.apps/web-847cbcb586        1         1         1       5m1s

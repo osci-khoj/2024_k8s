@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: PersistentVolume              # PersistenVolume형태로 kind정의
+metadata:
+  name: nginx-vol-pv-5
+  labels:
+    release: stable
+    capacity: 1Gi
+spec:
+  capacity:
+    storage: 1Gi                  # 1G 사이즈로 생성
+  accessModes:               
+  - ReadWriteOnce
+  - ReadOnlyMany
+  - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    path: /nfs
+    server: w2-k8s
