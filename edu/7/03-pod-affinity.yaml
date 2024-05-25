@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: example-pod
+  name: example-pod3
 spec:
   affinity:
     podAffinity:
@@ -18,6 +18,6 @@ spec:
             matchLabels:
               app: backend
           topologyKey: kubernetes.io/hostname
-containers:
-- name: mycontainer
-  image: nginx
+  containers:
+    - name: mycontainer
+      image: nginx
