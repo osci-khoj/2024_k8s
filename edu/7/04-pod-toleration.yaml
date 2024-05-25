@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: example-pod
+  name: example-pod4
 spec:
   tolerations:
   - key: "disktype"
