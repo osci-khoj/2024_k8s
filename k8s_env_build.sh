@@ -18,8 +18,9 @@ sed -i.bak -r 's/(.+swap.+)/#\1/' /etc/fstab
 #  | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 sudo rm -rf /var/lib/apt/lists/*
+sudo apt-get clean
 sudo apt-get update -o Acquire::CompressionTypes::Order::=gz
-sudo apt update && sudo apt upgrade
+sudo apt update 
 
 gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys $KEYID
 gpg --export $KEYID  | sudo tee /etc/apt/trusted.gpg.d/k8s-keyid.gpg
