@@ -29,9 +29,9 @@ echo "alias kd='kubectl delete -f'" >> ~/.bashrc
 echo 'complete -F __start_kubectl k' >> ~/.bashrc
 
 # git clone k8s-code
-git clone https://github.com/dncs0725/2023_k8s.git
-mv /home/vagrant/2023_k8s $HOME
-find $HOME/2023_k8s -regex ".*\.\(sh\)" -exec chmod 700 {} \;
+git clone https://github.com/osci-khoj/2024_k8s.git
+mv /home/vagrant/2024_k8s  $HOME
+find $HOME/2024_k8s -regex ".*\.\(sh\)" -exec chmod 700 {} \;
 
 ### make rerepo-k8s-starter.kit and put permission
 ##cat <<EOF > /usr/local/bin/rerepo-k8s-starter.kit
