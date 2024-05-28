@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-container
+spec:
+  containers:
+  - name: ubuntu
+    image: ubuntu:20.04
+    command: ["/bin/sleep", "3650d"]
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+    - mountPath: /cache
+      name: cache-volume
+  - name: nginx
+    image: nginx
+    ports:
+    - containerPort: 80
+  volumes:
+  - name: cache-volume
+    emptyDir: {}
+  restartPolicy: Always
+  dnsConfig:
+    nameservers:
+      - 8.8.8.8

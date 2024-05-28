@@ -1,0 +1,36 @@
+[root@m-k8s ~]# curl --proto '=https' --tlsv1.2 -sSfL https://run.linkerd.io/emojivoto.yml | kubectl apply -f -
+namespace/emojivoto created
+serviceaccount/emoji created
+serviceaccount/voting created
+serviceaccount/web created
+service/emoji-svc created
+service/voting-svc created
+service/web-svc created
+deployment.apps/emoji created
+deployment.apps/vote-bot created
+deployment.apps/voting created
+deployment.apps/web created
+
+[root@m-k8s ~]# kubectl get all -n emojivoto
+NAME                            READY   STATUS    RESTARTS   AGE
+pod/emoji-5dbdd567bd-v9tmw      1/1     Running   0          15s
+pod/vote-bot-58b4f5fdb7-bzpsl   1/1     Running   0          15s
+pod/voting-5fdcddcfc-jltvb      1/1     Running   0          15s
+pod/web-67c857998c-w5dxm        1/1     Running   0          15s
+
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)             AGE
+service/emoji-svc    ClusterIP   10.233.5.28     <none>        8080/TCP,8801/TCP   16s
+service/voting-svc   ClusterIP   10.233.35.137   <none>        8080/TCP,8801/TCP   16s
+service/web-svc      ClusterIP   10.233.15.55    <none>        80/TCP              16s
+
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/emoji      1/1     1            1           16s
+deployment.apps/vote-bot   1/1     1            1           16s
+deployment.apps/voting     1/1     1            1           15s
+deployment.apps/web        1/1     1            1           15s
+
+NAME                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/emoji-5dbdd567bd      1         1         1       16s
+replicaset.apps/vote-bot-58b4f5fdb7   1         1         1       16s
+replicaset.apps/voting-5fdcddcfc      1         1         1       15s
+replicaset.apps/web-67c857998c        1         1         1       15s

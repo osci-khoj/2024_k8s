@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-rs
+  labels:
+    app: nginx-rs
+    tier: nginx-rs
+spec:
+  # modify replicas according to your case
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: nginx-rs
+  template:
+    metadata:
+      labels:
+        tier: nginx-rs
+    spec:
+      containers:
+      - name: nginx-rs
+        image: nginx

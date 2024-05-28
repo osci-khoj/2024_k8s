@@ -1,0 +1,5 @@
+etcdctl --endpoints=https://192.168.1.10:2379 \
+   --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+   --cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt \
+   --key=/etc/kubernetes/pki/etcd/healthcheck-client.key \
+   member list

@@ -1,0 +1,15 @@
+대시보드 설치
+[root@m-k8s ~]# linkerd viz install | kubectl apply -f -
+namespace/linkerd-viz created
+...
+
+포트포워딩
+[root@m-k8s ~]# kubectl -n emojivoto port-forward --address 0.0.0.0 svc/web-svc 8080:80 &
+Forwarding from 0.0.0.0:8080 -> 8080
+
+[root@m-k8s ~]# kubectl -n linkerd-viz port-forward --address 0.0.0.0 svc/web 8084:8084 &
+Forwarding from 0.0.0.0:8084 -> 8084
+
+[root@m-k8s ~]# jobs
+[1]-  Running                 kubectl -n emojivoto port-forward --address 0.0.0.0 svc/web-svc 8080:80 &
+[2]+  Running                 kubectl -n linkerd-viz port-forward --address 0.0.0.0 svc/web 8084:8084 &
