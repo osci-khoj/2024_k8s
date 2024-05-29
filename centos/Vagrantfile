@@ -16,17 +16,17 @@ Vagrant.configure("2") do |config|
   # Master Node #
   #=============#
 
-    config.vm.define "m-k8s" do |cfg|
+    config.vm.define "m-k8s-#{k8s_V[0..5]}" do |cfg|
       cfg.vm.box = "sysnet4admin/CentOS-k8s"
       cfg.vm.provider "virtualbox" do |vb|
-        vb.name = "m-k8s"
+        vb.name = "m-k8s-#{k8s_V[0..5]}"
         vb.cpus = 3
-        vb.memory = 4096
-        vb.customize ["modifyvm", :id, "--groups", "/k8s-C#{k8s_V[0..5]}"]]
+        vb.memory = 3072
+        vb.customize ["modifyvm", :id, "--groups", "/k8s-C#{k8s_V[0..5]}"]
       end
       cfg.vm.host_name = "m-k8s"
       cfg.vm.network "private_network", ip: "192.168.1.10"
-      cfg.vm.network "forwarded_port", guest: 22, host: 50010, auto_correct: true, id: "ssh"
+      cfg.vm.network "forwarded_port", guest: 22, host: 60010, auto_correct: true, id: "ssh"
       cfg.vm.synced_folder "../data", "/vagrant", disabled: true
 #      cfg.vm.synced_folder "../", "/vagrant"
       cfg.vm.provision "shell", path: "k8s_env_build.sh", args: N
@@ -39,17 +39,17 @@ Vagrant.configure("2") do |config|
   #==============#
 
   (1..N).each do |i|
-    config.vm.define "w#{i}-k8s" do |cfg|
+    config.vm.define "w#{i}-k8s-#{k8s_V[0..5]}" do |cfg|
       cfg.vm.box = "sysnet4admin/CentOS-k8s"
       cfg.vm.provider "virtualbox" do |vb|
-        vb.name = "w#{i}-k8s"
+        vb.name = "w#{i}-k8s-#{k8s_V[0..5]}"
         vb.cpus = 2
-        vb.memory = 4096
-        vb.customize ["modifyvm", :id, "--groups", "/k8s-C#{k8s_V[0..5]}"]]
+        vb.memory = 2048
+        vb.customize ["modifyvm", :id, "--groups", "/k8s-C#{k8s_V[0..5]}"]
       end
       cfg.vm.host_name = "w#{i}-k8s"
       cfg.vm.network "private_network", ip: "192.168.1.10#{i}"
-      cfg.vm.network "forwarded_port", guest: 22, host: "5010#{i}", auto_correct: true, id: "ssh"
+      cfg.vm.network "forwarded_port", guest: 22, host: "6010#{i}", auto_correct: true, id: "ssh"
       cfg.vm.synced_folder "../data", "/vagrant", disabled: true
       cfg.vm.provision "shell", path: "k8s_env_build.sh", args: N
       cfg.vm.provision "shell", path: "k8s_pkg_cfg.sh", args: [ k8s_V, docker_V, ctrd_V ]
